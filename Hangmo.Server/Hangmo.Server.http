@@ -1,0 +1,6 @@
+@Hangmo.Server_HostAddress = http://localhost:5032
+
+GET {{Hangmo.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
