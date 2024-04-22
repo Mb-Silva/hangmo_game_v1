@@ -1,10 +1,12 @@
 using Hangmo.Server.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangmo.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class OpenAIController : ControllerBase
     {
         private readonly IOpenAI _openAI;
@@ -14,7 +16,7 @@ namespace Hangmo.Server.Controllers
             _openAI = openAI;
         }
 
-        [HttpGet("answer")]
+        [HttpGet(Name = "GetAswer")]
         public async Task<IActionResult> Get(string prompt)
         {
             var response = await _openAI.GetChatCompletionAsync(prompt);
