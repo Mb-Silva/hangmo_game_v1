@@ -1,10 +1,9 @@
-﻿using Hangmo.Server.Repository.Models;
-using Hangmo.Server.Services.Interfaces;
-using OpenAI;
-using OpenAI.Chat;
+﻿using Hangmo.Server.Services.Interfaces;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Hangmo.Server.Repository.Models;
 
 namespace Hangmo.Server.Services
 {
