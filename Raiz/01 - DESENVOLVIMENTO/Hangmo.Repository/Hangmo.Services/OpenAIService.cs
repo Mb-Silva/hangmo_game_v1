@@ -7,7 +7,7 @@ using Hangmo.Server.Repository.Models;
 
 namespace Hangmo.Server.Services
 {
-    public class OpenAIService(IConfiguration configuration, IHttpClientFactory httpClientFactory) : IOpenAI
+    public class OpenAIService(IConfiguration configuration, IHttpClientFactory httpClientFactory) : IOpenAIService
     {
         public async Task<string> GetChatCompletionAsync(string prompt)
         {
