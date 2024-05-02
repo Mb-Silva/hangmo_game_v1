@@ -1,6 +1,6 @@
 ﻿namespace Hangmo.Server.Services.Interfaces
 {
-    public interface IOpenAI
+    public interface IOpenAIService
     {
         Task<string> GetChatCompletionAsync(string prompt);
     }

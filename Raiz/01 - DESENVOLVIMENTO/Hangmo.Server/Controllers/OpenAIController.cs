@@ -9,14 +9,14 @@ namespace Hangmo.Server.Controllers
     [Authorize]
     public class OpenAIController : ControllerBase
     {
-        private readonly IOpenAI _openAI;
+        private readonly IOpenAIService _openAI;
 
-        public OpenAIController(IOpenAI openAI)
+        public OpenAIController(IOpenAIService openAI)
         {
             _openAI = openAI;
         }
 
-        [HttpGet(Name = "GetAswer")]
+        [HttpGet(Name = "GetAnswer")]
         public async Task<IActionResult> Get(string prompt)
         {
             var response = await _openAI.GetChatCompletionAsync(prompt);

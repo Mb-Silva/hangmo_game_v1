@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Hangmo.Data.Entities;
+using Hangmo.Services.Interfaces;
+using Hangmo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient(); //Utilizado para a conexão com a IA
 
 builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionDb")));
@@ -39,7 +41,9 @@ builder.Services.AddIdentityApiEndpoints<AppUser>()
 builder.Services.AddAuthentication();
 builder.Services.AddHealthChecks();
 
-builder.Services.AddScoped<IOpenAI, OpenAIService>();
+builder.Services.AddScoped<IOpenAIService, OpenAIService>();
+builder.Services.AddScoped<IGameService, GameService>();
+
 
 var app = builder.Build();
 
