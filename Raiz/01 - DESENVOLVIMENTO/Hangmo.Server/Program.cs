@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Hangmo.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,12 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionDb")));
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionDb")));
 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<AppDbContext>();
+
+
 
 builder.Services.AddAuthentication();
 builder.Services.AddHealthChecks();
@@ -50,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
