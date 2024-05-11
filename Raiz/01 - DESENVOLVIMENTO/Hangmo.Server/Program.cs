@@ -1,21 +1,23 @@
-using Hangmo.Data;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Server.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using Hangmo.Data.Entities;
 using Hangmo.Services.Interfaces;
 using Hangmo.Services;
+using Hangmo.Repository.Data.Entities;
+using Hangmo.Repository.Data;
+using Hangmo.Server.Services.HostedServices;
+using Hangmo.Repository.Data.DAO.Interfaces;
+using Hangmo.Repository.Data.DAO;
+using Hangmo.Repository.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -36,13 +38,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-
-
 builder.Services.AddAuthentication();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<IOpenAIService, OpenAIService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IWordsService, WordsService>();
+builder.Services.AddScoped<IBaseDAO<Words>, WordsDAO>();
+builder.Services.AddScoped<BaseService<Words>, WordsService>();
+builder.Services.AddScoped<WordsDAO>();
+
+builder.Services.AddHostedService<WordGenerationService>(); // Registra o WordGenerationService como um serviço hospedado
 
 
 var app = builder.Build();

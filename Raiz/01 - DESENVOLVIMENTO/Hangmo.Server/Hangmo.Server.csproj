@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LibChaCha20" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>8.*-*</Version>
     </PackageReference>
@@ -25,11 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\hangmo.client\Hangmo.Client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\Hangmo.Repository\Hangmo.Data\Hangmo.Data.csproj" />
-    <ProjectReference Include="..\Hangmo.Repository\Hangmo.Services\Hangmo.Services.csproj" />
+    <ProjectReference Include="..\Hangmo.Repository\Hangmo.Repository.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,13 +5,7 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangmo.Server", "Hangmo.Server\Hangmo.Server.csproj", "{0D1027EB-1F29-4DC2-8D0E-B6C8F619EB14}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Hangmo.Client", "hangmo.client\Hangmo.Client.esproj", "{51D7A1B5-1362-4C32-8DFF-44EBFFBA9105}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hangmo.Repository", "Hangmo.Repository", "{E9A6E45C-34E4-44E0-A234-7FD547CB9571}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangmo.Data", "Hangmo.Repository\Hangmo.Data\Hangmo.Data.csproj", "{F8199AD7-98FE-47EA-97BA-94B019EE73EE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangmo.Services", "Hangmo.Repository\Hangmo.Services\Hangmo.Services.csproj", "{D17C7DD7-F4E9-4E58-8C89-8F166C20AC61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangmo.Repository", "Hangmo.Repository\Hangmo.Repository.csproj", "{3D57E237-271A-4DF1-A446-62B348509E4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,23 +17,13 @@ Global
 		{0D1027EB-1F29-4DC2-8D0E-B6C8F619EB14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D1027EB-1F29-4DC2-8D0E-B6C8F619EB14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D1027EB-1F29-4DC2-8D0E-B6C8F619EB14}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51D7A1B5-1362-4C32-8DFF-44EBFFBA9105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51D7A1B5-1362-4C32-8DFF-44EBFFBA9105}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51D7A1B5-1362-4C32-8DFF-44EBFFBA9105}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51D7A1B5-1362-4C32-8DFF-44EBFFBA9105}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{F8199AD7-98FE-47EA-97BA-94B019EE73EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8199AD7-98FE-47EA-97BA-94B019EE73EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8199AD7-98FE-47EA-97BA-94B019EE73EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D17C7DD7-F4E9-4E58-8C89-8F166C20AC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D17C7DD7-F4E9-4E58-8C89-8F166C20AC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D17C7DD7-F4E9-4E58-8C89-8F166C20AC61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D57E237-271A-4DF1-A446-62B348509E4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D57E237-271A-4DF1-A446-62B348509E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D57E237-271A-4DF1-A446-62B348509E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D57E237-271A-4DF1-A446-62B348509E4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F8199AD7-98FE-47EA-97BA-94B019EE73EE} = {E9A6E45C-34E4-44E0-A234-7FD547CB9571}
-		{D17C7DD7-F4E9-4E58-8C89-8F166C20AC61} = {E9A6E45C-34E4-44E0-A234-7FD547CB9571}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50279C69-FC37-4412-855C-E1E8FBE06C31}

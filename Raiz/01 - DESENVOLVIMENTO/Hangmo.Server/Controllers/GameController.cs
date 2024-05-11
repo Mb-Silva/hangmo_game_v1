@@ -1,4 +1,5 @@
 ﻿using Hangmo.Server.Repository.Models;
+using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +14,11 @@ namespace Hangmo.Server.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
-        public GameController(IGameService gameService)
+        private readonly IWordsService _wordsService;
+        public GameController(IGameService gameService, IWordsService wordsService)
         {
             _gameService = gameService;
+            _wordsService = wordsService;
         }
 
         [HttpGet("ValidatePosition", Name = "ValidatePosition")]
@@ -35,6 +38,21 @@ namespace Hangmo.Server.Controllers
             else
             {
                 return NotFound();
+            }
+        }
+
+        [HttpGet("DailyWord", Name = "DailyWord")]
+        public ActionResult<int> GetDailyWord()
+        {
+            try
+            {
+                int positions = _wordsService.GetDailyWord();
+
+                return Ok(positions);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }
