@@ -11,8 +11,9 @@ namespace Hangmo.Repository.Data
 
         }
 
-        public DbSet<Words> Words { get; set; }
-
+        public DbSet<Word> Words { get; set; }
+        public DbSet<Game> Games { get; set; }
+        
     }
 }
 

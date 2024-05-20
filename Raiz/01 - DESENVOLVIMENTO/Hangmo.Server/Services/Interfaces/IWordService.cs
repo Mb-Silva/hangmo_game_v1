@@ -1,6 +1,6 @@
 ﻿namespace Hangmo.Server.Services.Interfaces
 {
-    public interface IWordsService
+    public interface IWordService
     {
         int GetDailyWord();
     }

@@ -43,10 +43,11 @@ builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<IOpenAIService, OpenAIService>();
 builder.Services.AddScoped<IGameService, GameService>();
-builder.Services.AddScoped<IWordsService, WordsService>();
-builder.Services.AddScoped<IBaseDAO<Words>, WordsDAO>();
-builder.Services.AddScoped<BaseService<Words>, WordsService>();
-builder.Services.AddScoped<WordsDAO>();
+builder.Services.AddScoped<IWordService, WordService>();
+builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
+builder.Services.AddScoped<IBaseDAO<Game>, GameDAO>();
+builder.Services.AddScoped<BaseService<Word>, WordService>();
+builder.Services.AddScoped<WordDAO>();
 
 builder.Services.AddHostedService<WordGenerationService>(); // Registra o WordGenerationService como um serviço hospedado
 

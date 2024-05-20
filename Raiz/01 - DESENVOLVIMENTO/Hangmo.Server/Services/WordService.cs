@@ -5,12 +5,12 @@ using Hangmo.Server.Services.Interfaces;
 
 namespace Hangmo.Repository.Services
 {
-    public class WordsService : BaseService<Words>, IWordsService
+    public class WordService : BaseService<Word>, IWordService
     {
-        private WordsDAO _wordsDAO;
-        public WordsService(IBaseDAO<Words> baseDao, WordsDAO wordsDao) : base(baseDao)
+        private WordDAO _wordDAO;
+        public WordService(IBaseDAO<Word> baseDao, WordDAO wordDao) : base(baseDao)
         {
-            _wordsDAO = wordsDao;
+            _wordDAO = wordDao;
         }
 
         public int GetDailyWord()
@@ -21,13 +21,13 @@ namespace Hangmo.Repository.Services
             return cryptHelper.Decrypt(wordObject.Word).Length;
         }
 
-        private Words GetRandomWordByDate(DateTime date)
+        private Word GetRandomWordByDate(DateTime date)
         {
             var random = new Random();
-            var wordsList = _wordsDAO.ListByDate(date);
-            var randomIndex = random.Next(wordsList.Count);
+            var wordList = _wordDAO.ListByDate(date);
+            var randomIndex = random.Next(wordList.Count);
 
-            return wordsList[randomIndex];
+            return wordList[randomIndex];
         }
     }
 }

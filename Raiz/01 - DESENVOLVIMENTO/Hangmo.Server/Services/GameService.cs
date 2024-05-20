@@ -1,6 +1,8 @@
 ﻿using System;
 using Azure.Identity;
+using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Data.DAO.Interfaces;
+using Hangmo.Repository.Data.Entities;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 
@@ -8,11 +10,14 @@ namespace Hangmo.Services
 {
     public class GameService : IGameService
     {
-        private readonly IWordsService _wordService;
+        private readonly IWordService _wordService;
+        private IBaseDAO<Game> _gameDAO;
+        
 
-        public GameService(IWordsService wordsService) 
+        public GameService(IWordService wordsService, IBaseDAO<Game> gameDAO) 
         { 
             _wordService = wordsService;
+            _gameDAO = gameDAO;
         }
 
         public (bool, List<(int, char)>) FindLetter(string palavra, char letra)
@@ -71,8 +76,29 @@ namespace Hangmo.Services
 
             return false;
         }
+        public async Task<Game> GetGameById(int id)
+        {
+            return await _gameDAO.GetByIdAsync(id);
+        }
 
+        public async Task<Game> AddGame(int appUserId, int wordId)
+        {
+            var game = new Game(appUserId, wordId);
+            await _gameDAO.AddAsync(game); 
+            return game;
+        }
 
+        public async Task DeleteGameById(int id) 
+        {  
+            await _gameDAO.DeleteAsync(id);
+        }
+
+        public async Task UpdateGameById(int id) 
+        {   
+            var game = await GetGameById(id);
+            await _gameDAO.UpdateAsync(game);
+
+        }
 
     }
 }

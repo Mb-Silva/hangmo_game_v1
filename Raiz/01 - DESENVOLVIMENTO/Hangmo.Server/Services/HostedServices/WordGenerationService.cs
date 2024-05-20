@@ -36,13 +36,13 @@ namespace Hangmo.Server.Services.HostedServices
                     var cryptHelper = new CryptHelper();
 
                     // Resolve o BaseService<Words> dentro do escopo
-                    var wordsService = serviceProvider.GetRequiredService<BaseService<Words>>();
+                    var wordsService = serviceProvider.GetRequiredService<BaseService<Word>>();
 
                     // Geração da palavra usando a API OpenAI
                     string word = await GenerateWordAsync();
                     var valueCrypt = cryptHelper.Crypt(word);
 
-                    var wordModel = new Words();
+                    var wordModel = new Word();
                     wordModel.Date = DateTime.UtcNow;
                     wordModel.Word = valueCrypt;
 

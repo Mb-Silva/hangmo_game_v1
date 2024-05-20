@@ -1,24 +1,27 @@
-﻿using Hangmo.Server.Repository.Models;
+﻿using Hangmo.Repository.Data.Entities;
+using Hangmo.Server.Repository.Models;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System.Collections.Generic;
 
 namespace Hangmo.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     //[Authorize]
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
-        private readonly IWordsService _wordsService;
-        public GameController(IGameService gameService, IWordsService wordsService)
+        private readonly IWordService _wordService;
+        public GameController(IGameService gameService, IWordService wordService)
         {
             _gameService = gameService;
-            _wordsService = wordsService;
+            _wordService = wordService;
         }
 
         [HttpGet("ValidatePosition", Name = "ValidatePosition")]
@@ -46,7 +49,7 @@ namespace Hangmo.Server.Controllers
         {
             try
             {
-                int positions = _wordsService.GetDailyWord();
+                int positions = _wordService.GetDailyWord();
 
                 return Ok(positions);
             }
@@ -55,5 +58,28 @@ namespace Hangmo.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Game>> GetGameById(int id)
+        {
+            return await _gameService.GetGameById(id);
+        }
+
+        [HttpPost("Create")]
+        public async Task<ActionResult> CreateGame(int appUserId, int wordId) 
+        {
+            var game = await _gameService.AddGame(appUserId, wordId);
+            return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
+
+        }
+
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateGame(int id) 
+        {
+            await _gameService.UpdateGameById(id);
+            return Ok();
+        }
+
+        
     }
 }
