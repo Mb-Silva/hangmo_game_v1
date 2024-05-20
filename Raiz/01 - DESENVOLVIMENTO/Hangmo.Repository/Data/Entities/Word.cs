@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Hangmo.Repository.Data.Entities
 {
-    public class Words
+    public class Word
     {
         public int Id { get; set; }
-        public byte[] Word { get; set; }
+        public byte[] SecretWord { get; set; }
         public DateTime Date { get; set; }
     }
 }
