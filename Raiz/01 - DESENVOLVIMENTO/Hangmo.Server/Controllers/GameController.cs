@@ -1,5 +1,6 @@
 ﻿using Hangmo.Repository.Data.Entities;
 using Hangmo.Server.Repository.Models;
+using Hangmo.Server.Requests;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +63,11 @@ namespace Hangmo.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Game>> GetGameById(int id)
         {
-            return await _gameService.GetGameById(id);
+            var game =  await _gameService.GetGameById(id);
+            
+            if (game == null) { return NotFound();}
+            
+            return Ok(game);
         }
 
         [HttpPost("Create")]
@@ -74,12 +79,16 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateGame(int id) 
-        {
-            await _gameService.UpdateGameById(id);
-            return Ok();
+        public async Task<IActionResult> UpdateGame(int id, [FromBody] GameUpdateRequest request) 
+        {   if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var updateGame = await _gameService.UpdateGameById(id, request);
+
+            if (updateGame == null) { return NotFound(); }
+            return Ok(updateGame);
         }
 
-        
     }
 }

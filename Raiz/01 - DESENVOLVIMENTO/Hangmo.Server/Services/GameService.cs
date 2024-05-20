@@ -3,6 +3,7 @@ using Azure.Identity;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.Entities;
+using Hangmo.Server.Requests;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 
@@ -93,12 +94,27 @@ namespace Hangmo.Services
             await _gameDAO.DeleteAsync(id);
         }
 
-        public async Task UpdateGameById(int id) 
-        {   
-            var game = await GetGameById(id);
+        public async Task<Game?> UpdateGameById(int id, GameUpdateRequest request) 
+        {
+            var game = await _gameDAO.GetByIdAsync(id);
+
+            if (game == null)
+            {
+                return null;
+            }           
+
+            game.Status = request.Status ?? game.Status;
+            game.PointsEarned = request.PointsEarned ?? game.PointsEarned;
+            game.GuessCount = request.GuessCount ?? game.GuessCount;
+            game.Result = request.Result ?? game.Result;
+
             await _gameDAO.UpdateAsync(game);
 
+            return game;
+
+
         }
+
 
     }
 }

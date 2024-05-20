@@ -1,4 +1,5 @@
 ﻿using Hangmo.Repository.Data.Entities;
+using Hangmo.Server.Requests;
 
 namespace Hangmo.Services.Interfaces
 {
@@ -9,7 +10,9 @@ namespace Hangmo.Services.Interfaces
         Task<Game> GetGameById(int id);
         Task<Game> AddGame(int appUserId, int wordId);
         Task DeleteGameById(int id);
-        Task UpdateGameById(int id);
+        Task<Game?> UpdateGameById(int id, GameUpdateRequest request);
+
+        
 
     }
 }
