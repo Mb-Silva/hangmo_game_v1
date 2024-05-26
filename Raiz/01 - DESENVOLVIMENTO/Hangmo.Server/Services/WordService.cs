@@ -18,7 +18,7 @@ namespace Hangmo.Repository.Services
             var cryptHelper = new CryptHelper();
             var wordObject = GetRandomWordByDate(DateTime.Now);
 
-            return cryptHelper.Decrypt(wordObject.Word).Length;
+            return cryptHelper.Decrypt(wordObject.SecretWord).Length;
         }
 
         private Word GetRandomWordByDate(DateTime date)

@@ -44,7 +44,7 @@ namespace Hangmo.Server.Services.HostedServices
 
                     var wordModel = new Word();
                     wordModel.Date = DateTime.UtcNow;
-                    wordModel.Word = valueCrypt;
+                    wordModel.SecretWord = valueCrypt;
 
                     try
                     {
