@@ -90,5 +90,10 @@ namespace Hangmo.Server.Controllers
             return Ok(updateGame);
         }
 
+        [HttpGet("GetStatus")]
+        public IActionResult GetStatus() { 
+            return Ok("Api Funcionando!");
+        }
+
     }
 }
