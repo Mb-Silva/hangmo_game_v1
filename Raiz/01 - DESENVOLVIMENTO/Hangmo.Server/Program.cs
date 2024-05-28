@@ -12,6 +12,7 @@ using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Services;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Hangmo.Server.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IWordService, WordService>();
 builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
 builder.Services.AddScoped<IBaseDAO<Game>, GameDAO>();
 builder.Services.AddScoped<BaseService<Word>, WordService>();
+builder.Services.AddScoped<ICryptHelper, CryptHelper>();
 builder.Services.AddScoped<WordDAO>();
 
 builder.Services.AddHostedService<WordGenerationService>(); // Registra o WordGenerationService como um serviço hospedado

@@ -35,11 +35,13 @@ namespace Hangmo.Repository.Data.Entities
         
         public int PointsEarned { get; set; } = 0;
 
-        public int GuessCount { get; set; } = 0;
+        public int WrongGuessCount { get; set; } = 0;
         
         public GameStatus Status { get; set; } = GameStatus.Started;
 
         public GameResult Result { get; set; } = GameResult.None;
+
+
 
         [ForeignKey("AppUserId")]
         [Required]

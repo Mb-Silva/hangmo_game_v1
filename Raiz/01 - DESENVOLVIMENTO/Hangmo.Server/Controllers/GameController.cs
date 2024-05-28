@@ -25,10 +25,10 @@ namespace Hangmo.Server.Controllers
             _wordService = wordService;
         }
 
-        [HttpGet("ValidatePosition", Name = "ValidatePosition")]
-        public ActionResult<List<object>> GetValidatePosition(string palavra, char letra)
-        {
-            (bool success, List<(int, char)> positions) = _gameService.FindLetter(palavra, letra);
+        [HttpGet("{id}/ValidateGuess", Name = "ValidateGuess")]
+        public ActionResult<List<object>> ValidateGuess(int id, char letra)
+        {   
+            (bool success, List<(int, char)> positions) = _gameService.FindLetter(id, letra);
 
             if (success)
             {
@@ -78,7 +78,7 @@ namespace Hangmo.Server.Controllers
 
         }
 
-        [HttpPut("Update/{id}")]
+        [HttpPatch("{id}/Update")]
         public async Task<IActionResult> UpdateGame(int id, [FromBody] GameUpdateRequest request) 
         {   if (!ModelState.IsValid)
             {

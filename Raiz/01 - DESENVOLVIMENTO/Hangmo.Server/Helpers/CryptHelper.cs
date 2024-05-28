@@ -1,9 +1,10 @@
 ﻿using CSChaCha20;
+using Hangmo.Server.Services.Interfaces;
 using System.Text;
 
 namespace Hangmo.Server.Helpers
 {
-    public class CryptHelper
+    public class CryptHelper : ICryptHelper
     {
         byte[] key = Encoding.UTF8.GetBytes("ZKviVAs9HP0oGQPf3pxo40KDZxRC0b2r");
         byte[] iv = new byte[12];

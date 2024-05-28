@@ -10,12 +10,11 @@ namespace Hangmo.Server.Services
 
         private IBaseDAO<AppUser> _appUser;
         private IGameService _gameService;
-        private IUserGameService _userGameService;
-        public AppUserService(IBaseDAO<AppUser> appUser, IGameService gameService, IUserGameService userGameService) 
+        
+        public AppUserService(IBaseDAO<AppUser> appUser, IGameService gameService) 
         { 
             _appUser = appUser;
             _gameService = gameService;
-            _userGameService = userGameService;
         }
 
         
