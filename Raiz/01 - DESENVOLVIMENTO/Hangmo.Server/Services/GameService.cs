@@ -21,8 +21,10 @@ namespace Hangmo.Services
             _gameDAO = gameDAO;
         }
 
-        public (bool, List<(int, char)>) FindLetter(string palavra, char letra)
+        public (bool, List<(int, char)>) FindLetter(int gameId, char letra)
         {
+
+            var palavra = _wordService.getDecryptedWordByGameId(gameId);
             // Lista para armazenar as posições onde a letra foi encontrada, juntamente com o caractere encontrado
             List<(int, char)> posicoes = new List<(int, char)>();
 
@@ -105,7 +107,7 @@ namespace Hangmo.Services
 
             game.Status = request.Status ?? game.Status;
             game.PointsEarned = request.PointsEarned ?? game.PointsEarned;
-            game.GuessCount = request.GuessCount ?? game.GuessCount;
+            game.WrongGuessCount = request.WrongGuessCount ?? game.WrongGuessCount;
             game.Result = request.Result ?? game.Result;
 
             await _gameDAO.UpdateAsync(game);
