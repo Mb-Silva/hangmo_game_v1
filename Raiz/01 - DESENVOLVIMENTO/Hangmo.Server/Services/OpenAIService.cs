@@ -5,9 +5,9 @@ using Hangmo.Server.Repository.Models;
 
 namespace Hangmo.Server.Services
 {
-    public class OpenAIService(IConfiguration configuration, IHttpClientFactory httpClientFactory) : IOpenAIService
+    public class OpenAIService(IConfiguration configuration, IHttpClientFactory httpClientFactory) : IWordGenerationService
     {
-        public async Task<string> GetChatCompletionAsync(string prompt)
+        public async Task<string> GenerateWordsAsync(string prompt)
         {
             var httpClient = httpClientFactory.CreateClient("ChtpGPT");
 
