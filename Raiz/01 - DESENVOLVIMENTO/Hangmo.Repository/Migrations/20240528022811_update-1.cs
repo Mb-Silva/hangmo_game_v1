@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hangmo.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class relationaltest : Migration
+    public partial class update1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,7 +57,7 @@ namespace Hangmo.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Word = table.Column<byte[]>(type: "bytea", nullable: false),
+                    SecretWord = table.Column<byte[]>(type: "bytea", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -177,18 +177,28 @@ namespace Hangmo.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    inviteLink = table.Column<string>(type: "text", nullable: true),
-                    WordsId = table.Column<int>(type: "integer", nullable: true),
-                    guessCount = table.Column<int>(type: "integer", nullable: false)
+                    AppUserId = table.Column<string>(type: "text", nullable: false),
+                    WordId = table.Column<int>(type: "integer", nullable: false),
+                    PointsEarned = table.Column<int>(type: "integer", nullable: false),
+                    WrongGuessCount = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Result = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_Words_WordsId",
-                        column: x => x.WordsId,
+                        name: "FK_Games_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Games_Words_WordId",
+                        column: x => x.WordId,
                         principalTable: "Words",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -229,9 +239,14 @@ namespace Hangmo.Repository.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_WordsId",
+                name: "IX_Games_AppUserId",
                 table: "Games",
-                column: "WordsId");
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_WordId",
+                table: "Games",
+                column: "WordId");
         }
 
         /// <inheritdoc />
