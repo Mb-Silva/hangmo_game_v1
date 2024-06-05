@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hangmo.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240514180010_relational-test-2")]
-    partial class relationaltest2
+    [Migration("20240528022811_update-1")]
+    partial class update1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,24 +97,35 @@ namespace Hangmo.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GuessCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("WordsId")
+                    b.Property<int>("PointsEarned")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WordId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WrongGuessCount")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WordsId");
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("WordId");
 
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Hangmo.Repository.Data.Entities.Words", b =>
+            modelBuilder.Entity("Hangmo.Repository.Data.Entities.Word", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,8 +136,7 @@ namespace Hangmo.Repository.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("Word")
-                        .IsRequired()
+                    b.Property<byte[]>("SecretWord")
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
@@ -268,11 +278,21 @@ namespace Hangmo.Repository.Migrations
 
             modelBuilder.Entity("Hangmo.Repository.Data.Entities.Game", b =>
                 {
-                    b.HasOne("Hangmo.Repository.Data.Entities.Words", "Words")
+                    b.HasOne("Hangmo.Repository.Data.Entities.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("WordsId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Words");
+                    b.HasOne("Hangmo.Repository.Data.Entities.Word", "Word")
+                        .WithMany()
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Word");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
