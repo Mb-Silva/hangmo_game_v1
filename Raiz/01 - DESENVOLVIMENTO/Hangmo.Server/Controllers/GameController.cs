@@ -71,7 +71,7 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> CreateGame(int appUserId, int wordId) 
+        public async Task<ActionResult> CreateGame(string appUserId, int wordId) 
         {
             var game = await _gameService.AddGame(appUserId, wordId);
             return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);

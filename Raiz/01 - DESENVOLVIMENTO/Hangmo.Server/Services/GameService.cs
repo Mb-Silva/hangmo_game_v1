@@ -84,7 +84,7 @@ namespace Hangmo.Services
             return await _gameDAO.GetByIdAsync(id);
         }
 
-        public async Task<Game> AddGame(int appUserId, int wordId)
+        public async Task<Game> AddGame(string appUserId, int wordId)
         {
             var game = new Game(appUserId, wordId);
             await _gameDAO.AddAsync(game); 

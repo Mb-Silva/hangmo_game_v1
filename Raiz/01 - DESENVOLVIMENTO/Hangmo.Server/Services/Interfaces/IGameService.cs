@@ -8,7 +8,7 @@ namespace Hangmo.Services.Interfaces
         (bool, List<(int, char)>) FindLetter(int gameId, char letra);
 
         Task<Game> GetGameById(int id);
-        Task<Game> AddGame(int appUserId, int wordId);
+        Task<Game> AddGame(string appUserId, int wordId);
         Task DeleteGameById(int id);
         Task<Game?> UpdateGameById(int id, GameUpdateRequest request);
 
