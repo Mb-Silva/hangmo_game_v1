@@ -9,13 +9,13 @@ using Hangmo.Server.Repository.Models;
 
 namespace Hangmo.Server.Services.HostedServices
 {
-    public class WordGenerationService : BackgroundService
+    public class HostedWordGeneration : BackgroundService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public WordGenerationService(IServiceScopeFactory serviceScopeFactory, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public HostedWordGeneration(IServiceScopeFactory serviceScopeFactory, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
