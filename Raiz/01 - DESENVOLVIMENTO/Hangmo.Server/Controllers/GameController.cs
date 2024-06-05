@@ -72,6 +72,7 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpPost("Create")]
+
         public async Task<ActionResult> CreateGame() 
         {
             var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

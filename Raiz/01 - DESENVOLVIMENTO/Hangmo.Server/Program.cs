@@ -41,8 +41,10 @@ builder.Services.AddIdentityApiEndpoints<AppUser>()
 
 builder.Services.AddAuthentication();
 builder.Services.AddHealthChecks();
+builder.Services.AddCors();
 
 builder.Services.AddScoped<IOpenAIService, OpenAIService>();
+builder.Services.AddScoped<IGeminiService, GeminiService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IWordService, WordService>();
 builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
@@ -68,6 +70,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();
+// global cors policy
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials()); // allow credentials
 
 app.UseAuthorization();
 

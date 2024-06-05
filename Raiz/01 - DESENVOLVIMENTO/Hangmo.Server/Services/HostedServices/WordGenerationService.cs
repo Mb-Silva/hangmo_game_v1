@@ -27,7 +27,7 @@ namespace Hangmo.Server.Services.HostedServices
             while (!stoppingToken.IsCancellationRequested)
             {
                 // Aguarda X tempo antes de gerar a próxima palavra
-                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(60), stoppingToken);
 
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
