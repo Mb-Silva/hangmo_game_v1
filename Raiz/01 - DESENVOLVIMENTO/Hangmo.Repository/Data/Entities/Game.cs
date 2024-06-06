@@ -28,7 +28,7 @@ namespace Hangmo.Repository.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        public int AppUserId { get; set; }
+        public string AppUserId { get; set; }
         
         [Required]
         public int WordId { get; set; }
@@ -51,7 +51,7 @@ namespace Hangmo.Repository.Data.Entities
         [Required]
         public Word? Word { get; set; }
 
-        public Game( int appUserId, int wordId )
+        public Game(string appUserId, int wordId )
         {
             AppUserId = appUserId;
             WordId = wordId;
