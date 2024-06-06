@@ -41,8 +41,9 @@ builder.Services.AddIdentityApiEndpoints<AppUser>()
 
 builder.Services.AddAuthentication();
 builder.Services.AddHealthChecks();
+builder.Services.AddCors();
 
-builder.Services.AddScoped<IOpenAIService, OpenAIService>();
+builder.Services.AddScoped<IWordGenerationService, GeminiService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IWordService, WordService>();
 builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
@@ -51,7 +52,7 @@ builder.Services.AddScoped<BaseService<Word>, WordService>();
 builder.Services.AddScoped<ICryptHelper, CryptHelper>();
 builder.Services.AddScoped<WordDAO>();
 
-builder.Services.AddHostedService<WordGenerationService>(); // Registra o WordGenerationService como um serviço hospedado
+builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
 
 
 var app = builder.Build();
@@ -68,6 +69,12 @@ app.UseSwaggerUI();
 
 app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();
+// global cors policy
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials()); // allow credentials
 
 app.UseAuthorization();
 

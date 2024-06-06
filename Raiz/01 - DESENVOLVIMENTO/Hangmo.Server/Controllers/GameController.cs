@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Hangmo.Server.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
@@ -27,7 +28,7 @@ namespace Hangmo.Server.Controllers
 
         [HttpGet("{id}/ValidateGuess", Name = "ValidateGuess")]
         public ActionResult<List<object>> ValidateGuess(int id, char letra)
-        {   
+        {
             (bool success, List<(int, char)> positions) = _gameService.FindLetter(id, letra);
 
             if (success)
@@ -63,18 +64,22 @@ namespace Hangmo.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Game>> GetGameById(int id)
         {
-            var game =  await _gameService.GetGameById(id);
-            
-            if (game == null) { return NotFound();}
-            
+            var game = await _gameService.GetGameById(id);
+
+            if (game == null) { return NotFound(); }
+
             return Ok(game);
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult> CreateGame(string appUserId, int wordId) 
+
+        public async Task<ActionResult> CreateGame() 
         {
-            var game = await _gameService.AddGame(appUserId, wordId);
-            return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
+            var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine(appUserId);
+            return Ok(appUserId);
+            //var game = await _gameService.AddGame();
+            //return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
 
         }
 

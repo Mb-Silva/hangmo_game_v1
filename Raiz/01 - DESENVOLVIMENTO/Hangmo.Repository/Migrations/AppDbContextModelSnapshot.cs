@@ -94,50 +94,35 @@ namespace Hangmo.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GuessCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("WordsId")
+                    b.Property<int>("PointsEarned")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("WordsId");
-
-                    b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("Hangmo.Repository.Data.Entities.GameUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Result")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EarnedScore")
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GameId")
+                    b.Property<int>("WordId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WrongGuessCount")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("WordId");
 
-                    b.ToTable("GameUsers");
+                    b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Hangmo.Repository.Data.Entities.Words", b =>
+            modelBuilder.Entity("Hangmo.Repository.Data.Entities.Word", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,8 +133,7 @@ namespace Hangmo.Repository.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("Word")
-                        .IsRequired()
+                    b.Property<byte[]>("SecretWord")
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
@@ -291,28 +275,21 @@ namespace Hangmo.Repository.Migrations
 
             modelBuilder.Entity("Hangmo.Repository.Data.Entities.Game", b =>
                 {
-                    b.HasOne("Hangmo.Repository.Data.Entities.Words", "Words")
-                        .WithMany()
-                        .HasForeignKey("WordsId");
-
-                    b.Navigation("Words");
-                });
-
-            modelBuilder.Entity("Hangmo.Repository.Data.Entities.GameUser", b =>
-                {
                     b.HasOne("Hangmo.Repository.Data.Entities.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Hangmo.Repository.Data.Entities.Game", "Game")
+                    b.HasOne("Hangmo.Repository.Data.Entities.Word", "Word")
                         .WithMany()
-                        .HasForeignKey("GameId")
+                        .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
 
-                    b.Navigation("Game");
+                    b.Navigation("Word");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

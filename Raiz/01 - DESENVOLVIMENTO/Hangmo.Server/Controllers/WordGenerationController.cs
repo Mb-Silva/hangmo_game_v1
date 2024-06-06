@@ -6,20 +6,20 @@ namespace Hangmo.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
-    public class OpenAIController : ControllerBase
+    //[Authorize]
+    public class WordGenerationController : ControllerBase
     {
-        private readonly IOpenAIService _openAI;
+        private readonly IWordGenerationService _wordGen;
 
-        public OpenAIController(IOpenAIService openAI)
+        public WordGenerationController(IWordGenerationService wordGen)
         {
-            _openAI = openAI;
+            _wordGen = wordGen;
         }
 
         [HttpGet(Name = "GetAnswer")]
         public async Task<IActionResult> Get(string prompt)
         {
-            var response = await _openAI.GetChatCompletionAsync(prompt);
+            var response = await _wordGen.GenerateWordsAsync(prompt);
             return Ok(response);
         }
     }
