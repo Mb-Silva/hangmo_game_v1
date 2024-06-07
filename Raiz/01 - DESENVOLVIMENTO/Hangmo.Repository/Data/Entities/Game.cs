@@ -1,20 +1,26 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Hangmo.Repository.Data.Entities
 
 
-{   public enum GameResult
+{
+    
+    public enum GameResult
     {
         Won,
         Lost,
         None
     }
+    
     public enum GameStatus
     {   Started,
         Ongoing,
@@ -23,7 +29,7 @@ namespace Hangmo.Repository.Data.Entities
 
     public class Game
     {
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
 
@@ -36,10 +42,12 @@ namespace Hangmo.Repository.Data.Entities
         public int PointsEarned { get; set; } = 0;
 
         public int WrongGuessCount { get; set; } = 0;
-        
-        public GameStatus Status { get; set; } = GameStatus.Started;
 
-        public GameResult Result { get; set; } = GameResult.None;
+
+        public GameStatus Status { get; set; } 
+
+
+        public GameResult Result { get; set; } 
 
 
 
@@ -55,6 +63,16 @@ namespace Hangmo.Repository.Data.Entities
         {
             AppUserId = appUserId;
             WordId = wordId;
+            Status = GameStatus.Started;
+            Result= GameResult.None;
+        }
+
+        public Game() {
+            
+            Status = GameStatus.Started;
+            Result = GameResult.None;
+
+
         }
     }
 }

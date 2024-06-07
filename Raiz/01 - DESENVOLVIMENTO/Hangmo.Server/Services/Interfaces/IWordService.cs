@@ -6,7 +6,11 @@ namespace Hangmo.Server.Services.Interfaces
     {
         int GetDailyWord();
 
-        Word GetWordByGameId(int gameId);
-        string getDecryptedWordByGameId(int gameId);
+        Task<Word> GetWordByGameId(int gameId);
+        Task<string> getDecryptedWordByGameId(int gameId);
+
+        Task<Word> GenerateWordByTheme(string theme);
+
+        Task<Word> AddWord(Word word);
     }
 }

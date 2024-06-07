@@ -21,10 +21,10 @@ namespace Hangmo.Services
             _gameDAO = gameDAO;
         }
 
-        public (bool, List<(int, char)>) FindLetter(int gameId, char letra)
+        public async Task<(bool, List<(int, char)>)>  FindLetter(int gameId, char letra)
         {
 
-            var palavra = _wordService.getDecryptedWordByGameId(gameId);
+            var palavra = await _wordService.getDecryptedWordByGameId(gameId);
             // Lista para armazenar as posições onde a letra foi encontrada, juntamente com o caractere encontrado
             List<(int, char)> posicoes = new List<(int, char)>();
 
@@ -84,17 +84,21 @@ namespace Hangmo.Services
             return await _gameDAO.GetByIdAsync(id);
         }
 
+        public async Task<Game> AddGame(string userId, string theme)
+        {
+            var word = await _wordService.GenerateWordByTheme(theme);
+            await _wordService.AddWord(word);
+
+            
+            var game = new Game(userId, word.Id);
+            await _gameDAO.AddAsync(game); 
+
+            return game;
+        }
+        
         public async Task<Game> GetGameByUser(string id)
         {
             return await _gameDAO.GetGameUserActive(id);
-        }
-
-        public async Task<Game> AddGame()
-        {
-            var game = new Game("1", 1);
-            game.Status = GameStatus.Started;
-            await _gameDAO.AddAsync(game); 
-            return game;
         }
 
         public async Task<Game> EndGame()
@@ -110,7 +114,7 @@ namespace Hangmo.Services
             await _gameDAO.DeleteAsync(id);
         }
 
-        public async Task<Game?> UpdateGameById(int id, GameUpdateRequest request) 
+        public async Task<Game?> UpdateGameById(int id, UpdateGameRequest request) 
         {
             var game = await _gameDAO.GetByIdAsync(id);
 

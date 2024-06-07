@@ -28,9 +28,11 @@ public class WordDAO : BaseDAO<Word>
         return items.ToList();
     }
 
-    public Word GetWordByGameId(int gameId)
+    public async Task<Word> GetWordByGameId(int gameId)
     {
-        return _context.Games.FirstOrDefault(g => g.Id == gameId).Word;
+        var result =  await _context.Games.FirstOrDefaultAsync(g => g.Id == gameId);
+        if (result != null) { Console.WriteLine(result.Word.SecretWord);}
+        return result.Word;
 
     }
 }

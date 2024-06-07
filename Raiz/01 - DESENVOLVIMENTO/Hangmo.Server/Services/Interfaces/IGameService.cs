@@ -5,11 +5,14 @@ namespace Hangmo.Services.Interfaces
 {
     public interface IGameService
     {
-        (bool, List<(int, char)>) FindLetter(int gameId, char letra);
+        Task<(bool, List<(int, char)>)> FindLetter(int gameId, char letra);
 
         Task<Game> GetGameById(int id);
-        Task<Game> AddGame();
+        Task<Game> AddGame(string userId, string theme);
         Task DeleteGameById(int id);
-        Task<Game?> UpdateGameById(int id, GameUpdateRequest request);
+
+        Task<Game?> UpdateGameById(int id, UpdateGameRequest request);
+       
+
     }
 }

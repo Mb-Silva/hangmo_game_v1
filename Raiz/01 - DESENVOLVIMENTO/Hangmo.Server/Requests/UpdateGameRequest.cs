@@ -2,7 +2,7 @@
 
 namespace Hangmo.Server.Requests
 {
-    public class GameUpdateRequest
+    public class UpdateGameRequest
     {
         public GameStatus? Status { get; set; }
         public GameResult? Result { get; set; }

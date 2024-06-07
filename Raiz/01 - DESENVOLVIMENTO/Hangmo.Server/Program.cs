@@ -11,12 +11,18 @@ using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Services;
 using Hangmo.Server.Helpers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+    
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -47,7 +53,6 @@ builder.Services.AddScoped<IWordService, WordService>();
 builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
 builder.Services.AddScoped<IBaseDAO<Game>, GameDAO>();
 builder.Services.AddScoped<BaseService<Word>, WordService>();
-builder.Services.AddScoped<ICryptHelper, CryptHelper>();
 builder.Services.AddScoped<WordDAO>();
 
 //builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
