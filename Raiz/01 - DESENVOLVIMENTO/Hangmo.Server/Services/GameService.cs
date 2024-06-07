@@ -12,10 +12,10 @@ namespace Hangmo.Services
     public class GameService : IGameService
     {
         private readonly IWordService _wordService;
-        private IBaseDAO<Game> _gameDAO;
+        private readonly GameDAO _gameDAO;
         
 
-        public GameService(IWordService wordsService, IBaseDAO<Game> gameDAO) 
+        public GameService(IWordService wordsService, GameDAO gameDAO) 
         { 
             _wordService = wordsService;
             _gameDAO = gameDAO;
@@ -93,6 +93,19 @@ namespace Hangmo.Services
             var game = new Game(userId, word.Id);
             await _gameDAO.AddAsync(game); 
 
+            return game;
+        }
+        
+        public async Task<Game> GetGameByUser(string id)
+        {
+            return await _gameDAO.GetGameUserActive(id);
+        }
+
+        public async Task<Game> EndGame()
+        {
+            var game = new Game("1", 1);
+            game.Status = GameStatus.Ended;
+            await _gameDAO.UpdateAsync(game);
             return game;
         }
 

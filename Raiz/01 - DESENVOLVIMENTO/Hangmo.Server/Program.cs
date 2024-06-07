@@ -7,11 +7,9 @@ using Hangmo.Services.Interfaces;
 using Hangmo.Services;
 using Hangmo.Repository.Data.Entities;
 using Hangmo.Repository.Data;
-using Hangmo.Server.Services.HostedServices;
 using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Hangmo.Server.Helpers;
 using System.Text.Json.Serialization;
 
@@ -57,7 +55,7 @@ builder.Services.AddScoped<IBaseDAO<Game>, GameDAO>();
 builder.Services.AddScoped<BaseService<Word>, WordService>();
 builder.Services.AddScoped<WordDAO>();
 
-builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
+//builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
 
 
 var app = builder.Build();
@@ -65,12 +63,12 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Configura o Swagger para aparecer em produção.
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();

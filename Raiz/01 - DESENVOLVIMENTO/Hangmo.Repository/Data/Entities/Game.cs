@@ -59,7 +59,7 @@ namespace Hangmo.Repository.Data.Entities
         [Required]
         public Word? Word { get; set; }
 
-        public Game( string appUserId, int wordId )
+        public Game(string appUserId, int wordId )
         {
             AppUserId = appUserId;
             WordId = wordId;

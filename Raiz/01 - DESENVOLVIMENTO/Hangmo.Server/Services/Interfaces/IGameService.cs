@@ -10,7 +10,9 @@ namespace Hangmo.Services.Interfaces
         Task<Game> GetGameById(int id);
         Task<Game> AddGame(string userId, string theme);
         Task DeleteGameById(int id);
+
         Task<Game?> UpdateGameById(int id, UpdateGameRequest request);
        
+
     }
 }

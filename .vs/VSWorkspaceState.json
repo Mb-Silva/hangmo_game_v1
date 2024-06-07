@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Raiz",
+    "\\Raiz\\01 - DESENVOLVIMENTO",
+    "\\Raiz\\01 - DESENVOLVIMENTO\\Hangmo.Server",
+    "\\Raiz\\01 - DESENVOLVIMENTO\\Hangmo.Server\\Controllers"
   ],
-  "SelectedNode": "\\Hangmo.sln",
+  "SelectedNode": "\\Raiz\\01 - DESENVOLVIMENTO\\Hangmo.Server\\appsettings.json",
   "PreviewInSolutionExplorer": false
 }
