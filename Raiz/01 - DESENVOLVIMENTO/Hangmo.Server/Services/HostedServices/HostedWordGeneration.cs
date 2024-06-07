@@ -33,19 +33,15 @@ namespace Hangmo.Server.Services.HostedServices
                 {
                     var serviceProvider = scope.ServiceProvider;
 
-                    var cryptHelper = new CryptHelper();
-
                     // Resolve o BaseService<Words> dentro do escopo
                     var wordsService = serviceProvider.GetRequiredService<BaseService<Word>>();
 
                     // Geração da palavra usando a API OpenAI
                     string word = await GenerateWordAsync();
-                    var valueCrypt = cryptHelper.Crypt(word);
-
-                    var wordModel = new Word();
+                    
+                    var wordModel = new Word(word);
                     wordModel.Date = DateTime.UtcNow;
-                    wordModel.SecretWord = valueCrypt;
-
+                    
                     try
                     {
                         await wordsService.AddAsync(wordModel);

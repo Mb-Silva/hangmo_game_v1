@@ -27,9 +27,9 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpGet("{id}/ValidateGuess", Name = "ValidateGuess")]
-        public ActionResult<List<object>> ValidateGuess(int id, char letra)
+        public async Task<ActionResult<List<object>>> ValidateGuessAsync(int id, char letra)
         {
-            (bool success, List<(int, char)> positions) = _gameService.FindLetter(id, letra);
+            (bool success, List<(int, char)> positions) = await _gameService.FindLetter(id, letra);
 
             if (success)
             {
@@ -73,19 +73,23 @@ namespace Hangmo.Server.Controllers
 
         [HttpPost("Create")]
 
-        public async Task<ActionResult> CreateGame() 
+        public async Task<ActionResult> CreateGame([FromBody] CreateGameRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
             var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine(appUserId);
-            return Ok(appUserId);
-            //var game = await _gameService.AddGame();
-            //return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
+            var game = await _gameService.AddGame(appUserId, request.Theme);
+            return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
 
         }
 
         [HttpPatch("{id}/Update")]
-        public async Task<IActionResult> UpdateGame(int id, [FromBody] GameUpdateRequest request) 
-        {   if (!ModelState.IsValid)
+        public async Task<IActionResult> UpdateGame(int id, [FromBody] UpdateGameRequest request)
+        { if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -95,5 +99,20 @@ namespace Hangmo.Server.Controllers
             return Ok(updateGame);
         }
 
+        [HttpPost("/Guess")]
+        public async Task<IActionResult> MakeGuess([FromBody] GuessRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            
+
+            
+
+            return Ok();
+
+        }
     }
 }

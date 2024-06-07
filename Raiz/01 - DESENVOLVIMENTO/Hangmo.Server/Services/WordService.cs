@@ -9,19 +9,18 @@ namespace Hangmo.Repository.Services
     public class WordService : BaseService<Word>, IWordService
     {
         private WordDAO _wordDAO;
-        private ICryptHelper _cryptHelper;
-        public WordService(IBaseDAO<Word> baseDao, WordDAO wordDao, ICryptHelper cryptHelper) : base(baseDao)
+        private IWordGenerationService _wordGenerationService;
+        public WordService(IBaseDAO<Word> baseDao, WordDAO wordDao, IWordGenerationService wordGenerationService) : base(baseDao)
         {
             _wordDAO = wordDao;
-            _cryptHelper = cryptHelper;
+            _wordGenerationService = wordGenerationService;
         }
 
         public int GetDailyWord()
         {
-            var cryptHelper = new CryptHelper();
             var wordObject = GetRandomWordByDate(DateTime.Now);
             Console.WriteLine(wordObject.SecretWord);
-            return cryptHelper.Decrypt(wordObject.SecretWord).Length;
+            return CryptHelper.Decrypt(wordObject.SecretWord).Length;
         }
 
         private Word GetRandomWordByDate(DateTime date)
@@ -33,13 +32,37 @@ namespace Hangmo.Repository.Services
             return wordList[randomIndex];
         }
 
-        public string getDecryptedWordByGameId(int gameId)
+        public async Task<string> getDecryptedWordByGameId(int gameId)
         {
-            return _cryptHelper.Decrypt(GetWordByGameId(gameId).SecretWord);
+            var result = await GetWordByGameId(gameId);
+            
+            return CryptHelper.Decrypt(result.SecretWord);
         }
-        public Word GetWordByGameId(int gameId)
+        
+        public async Task<Word> GetWordByGameId(int gameId)
         {
-            return _wordDAO.GetWordByGameId(gameId);
+            return await _wordDAO.GetWordByGameId(gameId);
+        }
+
+        public async Task<Word> GenerateWordByTheme(string theme)
+        {
+            string generatedWords =  await _wordGenerationService.GenerateWordsAsync(theme);
+            var wordList = ParseHelper.Parse(generatedWords);
+
+            Random random = new Random();
+            string randomWord = wordList.OrderBy(x => random.Next()).First();
+
+            Word word = new  Word(randomWord);
+
+            return word;
+        }
+
+
+        public async Task<Word> AddWord(Word word)
+        {
+           
+            await _wordDAO.AddAsync(word);
+            return word;
         }
     }
 }
