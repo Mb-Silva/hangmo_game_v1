@@ -20,7 +20,6 @@ namespace Hangmo.Repository.Services
         {
             var cryptHelper = new CryptHelper();
             var wordObject = GetRandomWordByDate(DateTime.Now);
-            Console.WriteLine(wordObject.SecretWord);
             return cryptHelper.Decrypt(wordObject.SecretWord).Length;
         }
 

@@ -1,6 +1,11 @@
 using Hangmo.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
+using System.Xml;
 
 namespace Hangmo.Server.Controllers
 {
@@ -20,7 +25,8 @@ namespace Hangmo.Server.Controllers
         public async Task<IActionResult> Get(string prompt)
         {
             var response = await _wordGen.GenerateWordsAsync(prompt);
-            return Ok(response);
+
+            return Ok(outputJson);
         }
     }
 }

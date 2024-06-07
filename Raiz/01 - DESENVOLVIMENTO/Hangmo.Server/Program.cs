@@ -45,10 +45,10 @@ builder.Services.AddScoped<IWordGenerationService, GeminiService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IWordService, WordService>();
 builder.Services.AddScoped<IBaseDAO<Word>, WordDAO>();
-builder.Services.AddScoped<IBaseDAO<Game>, GameDAO>();
 builder.Services.AddScoped<BaseService<Word>, WordService>();
 builder.Services.AddScoped<ICryptHelper, CryptHelper>();
 builder.Services.AddScoped<WordDAO>();
+builder.Services.AddScoped<GameDAO>();
 
 //builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
 
