@@ -30,8 +30,11 @@ public class WordDAO : BaseDAO<Word>
 
     public async Task<Word> GetWordByGameId(int gameId)
     {
-        var result =  await _context.Games.FirstOrDefaultAsync(g => g.Id == gameId);
-        if (result != null) { Console.WriteLine(result.Word.SecretWord);}
+        var result =  await _context.Games
+            .Include(g => g.Word)
+            .FirstOrDefaultAsync(g => g.Id == gameId);
+        
+      
         return result.Word;
 
     }

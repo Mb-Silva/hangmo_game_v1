@@ -47,10 +47,10 @@ namespace Hangmo.Repository.Services
         public async Task<Word> GenerateWordByTheme(string theme)
         {
             string generatedWords =  await _wordGenerationService.GenerateWordsAsync(theme);
+            
             var wordList = ParseHelper.Parse(generatedWords);
 
-            Random random = new Random();
-            string randomWord = wordList.OrderBy(x => random.Next()).First();
+            var randomWord = ParseHelper.GetRandomFromList<string>(wordList);           
 
             Word word = new  Word(randomWord);
 
