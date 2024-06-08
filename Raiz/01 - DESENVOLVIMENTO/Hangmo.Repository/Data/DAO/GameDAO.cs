@@ -18,9 +18,14 @@ namespace Hangmo.Repository.Data.DAO
 
         public async Task<Game> GetGameUserActive(string userId)
         {
-            var result = await _context.Games.Where(_ => _.AppUserId == userId && _.Status == GameStatus.Started).SingleAsync();
+            var result = await _context.Games.Where(_ => _.AppUserId == userId && _.Status == GameStatus.InProgress).SingleAsync();
 
             return result;
+        }
+
+        public async Task<Game> GetGameByIdAsync(int id)
+        {
+            return await _context.Games.Include(g => g.Word).FirstOrDefaultAsync(g => g.Id == id);
         }
     }
 }

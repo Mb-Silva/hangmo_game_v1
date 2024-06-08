@@ -16,14 +16,13 @@ namespace Hangmo.Repository.Data.Entities
     
     public enum GameResult
     {
-        Won,
-        Lost,
+        Win,
+        Loss,
         None
     }
     
     public enum GameStatus
-    {   Started,
-        Ongoing,
+    {   InProgress,
         Ended
     }
 
@@ -63,16 +62,9 @@ namespace Hangmo.Repository.Data.Entities
         {
             AppUserId = appUserId;
             WordId = wordId;
-            Status = GameStatus.Started;
+            Status = GameStatus.InProgress;
             Result= GameResult.None;
         }
 
-        public Game() {
-            
-            Status = GameStatus.Started;
-            Result = GameResult.None;
-
-
-        }
     }
 }
