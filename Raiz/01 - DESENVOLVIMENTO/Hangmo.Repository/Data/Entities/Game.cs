@@ -42,6 +42,7 @@ namespace Hangmo.Repository.Data.Entities
 
         public int WrongGuessCount { get; set; } = 0;
 
+        public int RevealedCharactersCount { get; set; } = 0;
 
         public GameStatus Status { get; set; } 
 
