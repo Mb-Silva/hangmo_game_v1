@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Azure.Identity;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Data.DAO.Interfaces;
@@ -8,6 +9,7 @@ using Hangmo.Server.Requests;
 using Hangmo.Server.ResponseModels;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace Hangmo.Services
 {
@@ -25,15 +27,30 @@ namespace Hangmo.Services
         }
 
 
-        public async Task<GuessResponse> MakeGuess(int gameId, char letter)
+        public async Task<MakeGuessResponse> MakeGuess(int gameId, char letter)
         {
             var game = await _gameDAO.GetGameByIdAsync(gameId);
 
             var word = CryptHelper.Decrypt(game.Word.SecretWord);
 
+            Console.WriteLine(word);
             var guessValidation = await FindLetter(word, letter);
 
-            GuessResponse response =new GuessResponse
+            if (!guessValidation.isPresent)
+            {
+                game.WrongGuessCount ++;
+            }
+            else
+            {
+                game.RevealedCharactersCount += guessValidation.positions.Count;
+            }
+
+            game = DetermineGameResult(game);
+            game = DetermineGameStatus(game);
+
+            _ = _gameDAO.UpdateAsync(game);
+
+            MakeGuessResponse response =new MakeGuessResponse
                 (
                 gameId,
                 game.Status, 
@@ -107,21 +124,34 @@ namespace Hangmo.Services
 
             return false;
         }
-        public async Task<Game> GetGameById(int id)
+        public async Task<GetGameResponse> GetGameById(int id)
         {
-            return await _gameDAO.GetByIdAsync(id);
+            Game game =  await _gameDAO.GetGameByIdAsync(id);
+
+            if (game == null)
+            {
+                throw new KeyNotFoundException("Game Not Found");
+            }
+
+            var wordDecrypt = CryptHelper.Decrypt(game.Word.SecretWord);
+            GetGameResponse response = new GetGameResponse(game.Id, game.Status, game.Result, game.WrongGuessCount, wordDecrypt.Length);
+
+            return response;
         }
 
-        public async Task<Game> AddGame(string userId, string theme)
+        public async Task<GetGameResponse> AddGame(string userId, string theme)
         {
             var word = await _wordService.GenerateWordByTheme(theme);
             await _wordService.AddWord(word);
 
             
             var game = new Game(userId, word.Id);
-            await _gameDAO.AddAsync(game); 
+            await _gameDAO.AddAsync(game);
 
-            return game;
+            var wordDecrypt = CryptHelper.Decrypt(game.Word.SecretWord);
+            GetGameResponse response = new GetGameResponse(game.Id, game.Status, game.Result, game.WrongGuessCount, wordDecrypt.Length);
+
+            return response;
         }
         
         public async Task<Game> GetGameByUser(string id)
@@ -135,6 +165,33 @@ namespace Hangmo.Services
             await _gameDAO.UpdateAsync(game);
             return game;
         }
+
+
+        private Game DetermineGameStatus(Game game) {
+            
+                        
+            if (game.Result != GameResult.None) {
+                game.Status = GameStatus.Ended;                            
+            }            
+            
+            return game;
+
+        }
+
+        private Game DetermineGameResult(Game game)
+        {
+            if (game.RevealedCharactersCount == game.Word.SecretWord.Length)
+            {
+                game.Result = GameResult.Win;
+            
+            }else if (game.WrongGuessCount >= 6)            
+            {
+                game.Result = GameResult.Loss;
+            }
+
+            return game;
+        }
+
 
         public async Task DeleteGameById(int id) 
         {  
@@ -161,7 +218,5 @@ namespace Hangmo.Services
 
 
         }
-
-
     }
 }
