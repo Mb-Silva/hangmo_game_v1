@@ -1,22 +1,27 @@
-﻿using Hangmo.Repository.Data.DAO.Interfaces;
+﻿using Hangmo.Repository.Data.DAO;
+using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.Entities;
+using Hangmo.Repository.Services;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 
 namespace Hangmo.Server.Services
 {
-    public class AppUserService
+    public class AppUserService : BaseService<AppUser>, IAppUserService
     {
-
-        private IBaseDAO<AppUser> _appUser;
-        private IGameService _gameService;
+        private AppUserDAO _userDAO;
         
-        public AppUserService(IBaseDAO<AppUser> appUser, IGameService gameService) 
-        { 
-            _appUser = appUser;
-            _gameService = gameService;
+        public AppUserService(IBaseDAO<AppUser> baseDao, AppUserDAO userDAO) : base(baseDao)
+        {
+            _userDAO = userDAO;
         }
 
-        
+        public async Task<AppUser> GetAppUser(string id)
+        {
+            var user = await _userDAO.GetByIdStringAsync(id);
+
+            return user;
+        }
+
     }
 }

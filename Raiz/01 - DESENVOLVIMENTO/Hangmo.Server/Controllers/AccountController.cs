@@ -1,27 +1,41 @@
 ﻿using Hangmo.Repository.Data.Entities;
+using Hangmo.Server.Services.Interfaces;
+using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangmo.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    //[Authorize]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<AppUser> _signInManager;
-
-        public AccountController(SignInManager<AppUser> signInManager)
+        private readonly IAppUserService _userService;
+        public AccountController(IAppUserService userService)
         {
-            _signInManager = signInManager;
+            _userService = userService;
         }
 
-        [HttpPost("logout")]
-        [Authorize]
-        public async Task<IActionResult> Logout()
+        [HttpGet("GetUser", Name = "GetUser")]
+        public async Task<IActionResult> GetUser(string userId)
         {
-            await _signInManager.SignOutAsync();
-            return NoContent();
+            try
+            {
+                var user = await _userService.GetAppUser(userId);
+
+                if (user == null)
+                    return NotFound();
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            
         }
     }
 }

@@ -27,6 +27,11 @@ namespace Hangmo.Repository.Data.DAO
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByIdStringAsync(string id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+
         public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);

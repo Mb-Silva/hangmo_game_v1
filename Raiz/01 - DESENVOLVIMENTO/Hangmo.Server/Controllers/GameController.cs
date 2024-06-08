@@ -16,7 +16,7 @@ using System.Security.Claims;
 namespace Hangmo.Server.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     [Authorize]
     public class GameController : ControllerBase
     {
