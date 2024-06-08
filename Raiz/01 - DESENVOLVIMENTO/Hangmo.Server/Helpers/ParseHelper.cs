@@ -17,5 +17,14 @@ namespace Hangmo.Server.Helpers
             
             return result;
         } 
+
+        public static T GetRandomFromList<T>(List<T> list)
+        {
+            Random random = new Random();
+            T randomItem = list.OrderBy(x => random.Next()).First();
+
+            
+            return randomItem;
+        }
     }
 }
