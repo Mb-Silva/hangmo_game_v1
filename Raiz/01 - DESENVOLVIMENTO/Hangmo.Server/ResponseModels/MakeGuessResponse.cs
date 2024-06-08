@@ -2,9 +2,9 @@
 
 namespace Hangmo.Server.ResponseModels
 {
-    public class GuessResponse
+    public class MakeGuessResponse
     {
-        public GuessResponse(int gameId, GameStatus gameStatus, GameResult gameResult, int wrongGuessCount, int wordLength, bool isPresent, List<int>? positions, char letter)
+        public MakeGuessResponse(int gameId, GameStatus gameStatus, GameResult gameResult, int wrongGuessCount, int wordLength, bool isPresent, List<int>? positions, char letter)
         {
             GameId = gameId;
             GameStatus = gameStatus;

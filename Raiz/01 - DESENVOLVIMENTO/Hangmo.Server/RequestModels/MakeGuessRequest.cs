@@ -1,6 +1,6 @@
 ﻿namespace Hangmo.Server.Requests
 {
-    public class GuessRequest
+    public class MakeGuessRequest
     {
         public int GameId { get; set; }
         public char Letter { get; set; }

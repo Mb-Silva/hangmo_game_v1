@@ -3,6 +3,7 @@ using System;
 using Hangmo.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hangmo.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608201504_right-guess-count")]
+    partial class rightguesscount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +107,7 @@ namespace Hangmo.Repository.Migrations
                     b.Property<int>("Result")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RevealedCharactersCount")
+                    b.Property<int>("RightGuessCount")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")

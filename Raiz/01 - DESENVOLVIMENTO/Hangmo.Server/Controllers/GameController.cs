@@ -1,4 +1,5 @@
-﻿using Hangmo.Repository.Data.Entities;
+﻿using Hangmo.Repository.Data.DAO;
+using Hangmo.Repository.Data.Entities;
 using Hangmo.Server.Repository.Models;
 using Hangmo.Server.Requests;
 using Hangmo.Server.ResponseModels;
@@ -27,15 +28,15 @@ namespace Hangmo.Server.Controllers
             _wordService = wordService;
         }
 
-        [HttpPost("ValidateGuess", Name = "ValidateGuess")]
-        public async Task<ActionResult<GuessResponse>> ValidateGuessAsync([FromBody] GuessRequest request)
+        [HttpPost("MakeGuess", Name = "MakeGuess")]
+        public async Task<ActionResult<MakeGuessResponse>> MakeGuessAsync([FromBody] MakeGuessRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            GuessResponse response = await _gameService.MakeGuess(request.GameId, request.Letter);            
+            MakeGuessResponse response = await _gameService.MakeGuess(request.GameId, request.Letter);            
 
             return Ok(response);
         }
@@ -56,13 +57,19 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGameById(int id)
+        public async Task<ActionResult<GetGameResponse>> GetGameById(int id)
         {
-            var game = await _gameService.GetGameById(id);
+            try
+            {
+                var response = await _gameService.GetGameById(id);
+                return Ok(response);
+            }
+            catch (KeyNotFoundException) {
 
-            if (game == null) { return NotFound(); }
+                return NotFound();
 
-            return Ok(game);
+            }
+
         }
 
         [HttpPost("Create")]
@@ -76,8 +83,8 @@ namespace Hangmo.Server.Controllers
 
 
             var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var game = await _gameService.AddGame(appUserId, request.Theme);
-            return CreatedAtAction(nameof(GetGameById), new { id = game.Id }, game);
+            var response = await _gameService.AddGame(appUserId, request.Theme);
+            return CreatedAtAction(nameof(GetGameById), new { Id = response.GameId }, response);
 
         }
 
@@ -91,6 +98,10 @@ namespace Hangmo.Server.Controllers
 
             if (updateGame == null) { return NotFound(); }
             return Ok(updateGame);
+
         }
+
+        
+
     }
 }
