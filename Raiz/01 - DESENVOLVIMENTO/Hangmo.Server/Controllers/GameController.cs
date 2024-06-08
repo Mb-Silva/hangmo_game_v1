@@ -1,6 +1,7 @@
 ﻿using Hangmo.Repository.Data.Entities;
 using Hangmo.Server.Repository.Models;
 using Hangmo.Server.Requests;
+using Hangmo.Server.ResponseModels;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -26,24 +27,17 @@ namespace Hangmo.Server.Controllers
             _wordService = wordService;
         }
 
-        [HttpGet("{id}/ValidateGuess", Name = "ValidateGuess")]
-        public async Task<ActionResult<List<object>>> ValidateGuessAsync(int id, char letra)
+        [HttpPost("ValidateGuess", Name = "ValidateGuess")]
+        public async Task<ActionResult<GuessResponse>> ValidateGuessAsync([FromBody] GuessRequest request)
         {
-            (bool success, List<(int, char)> positions) = await _gameService.FindLetter(id, letra);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            if (success)
-            {
-                List<object> serializableList = new List<object>();
-                foreach (var item in positions)
-                {
-                    serializableList.Add(new { Position = item.Item1, Character = item.Item2 });
-                }
-                return Ok(serializableList);
-            }
-            else
-            {
-                return NotFound();
-            }
+            GuessResponse response = await _gameService.MakeGuess(request.GameId, request.Letter);            
+
+            return Ok(response);
         }
 
         [HttpGet("DailyWord", Name = "DailyWord")]
@@ -97,22 +91,6 @@ namespace Hangmo.Server.Controllers
 
             if (updateGame == null) { return NotFound(); }
             return Ok(updateGame);
-        }
-
-        [HttpPost("/Guess")]
-        public async Task<IActionResult> MakeGuess([FromBody] GuessRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            
-
-            
-
-            return Ok();
-
         }
     }
 }

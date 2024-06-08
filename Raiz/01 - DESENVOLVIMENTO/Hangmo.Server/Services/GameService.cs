@@ -3,7 +3,9 @@ using Azure.Identity;
 using Hangmo.Repository.Data.DAO;
 using Hangmo.Repository.Data.DAO.Interfaces;
 using Hangmo.Repository.Data.Entities;
+using Hangmo.Server.Helpers;
 using Hangmo.Server.Requests;
+using Hangmo.Server.ResponseModels;
 using Hangmo.Server.Services.Interfaces;
 using Hangmo.Services.Interfaces;
 
@@ -12,6 +14,7 @@ namespace Hangmo.Services
     public class GameService : IGameService
     {
         private readonly IWordService _wordService;
+
         private readonly GameDAO _gameDAO;
         
 
@@ -21,12 +24,35 @@ namespace Hangmo.Services
             _gameDAO = gameDAO;
         }
 
-        public async Task<(bool, List<(int, char)>)>  FindLetter(int gameId, char letra)
-        {
 
-            var palavra = await _wordService.getDecryptedWordByGameId(gameId);
+        public async Task<GuessResponse> MakeGuess(int gameId, char letter)
+        {
+            var game = await _gameDAO.GetGameByIdAsync(gameId);
+
+            var word = CryptHelper.Decrypt(game.Word.SecretWord);
+
+            var guessValidation = await FindLetter(word, letter);
+
+            GuessResponse response =new GuessResponse
+                (
+                gameId,
+                game.Status, 
+                game.Result, 
+                game.WrongGuessCount,
+                word.Length, 
+                guessValidation.isPresent, 
+                guessValidation.positions, 
+                letter
+                );
+
+            return response;
+
+        }
+        public async Task<(Boolean isPresent, List<int> positions)> FindLetter (string palavra, char letra)
+        {           
+            
             // Lista para armazenar as posições onde a letra foi encontrada, juntamente com o caractere encontrado
-            List<(int, char)> posicoes = new List<(int, char)>();
+            List<int> posicoes = new List<int>();
 
             // Converte a palavra e a letra para minúsculas para fazer a comparação sem diferenciar maiúsculas de minúsculas
             palavra = palavra.ToLower();
@@ -42,11 +68,13 @@ namespace Hangmo.Services
                 if (caractere == letra || CorrespondenteEspecial(caractere, letra))
                 {
                     // Se sim, adiciona a posição e o caractere à lista de posições
-                    posicoes.Add((i, palavra[i]));
+                    posicoes.Add(i);
                 }
             }
 
             // Retorna verdadeiro se a letra foi encontrada e falso caso contrário
+
+            
             return (posicoes.Count > 0, posicoes);
         }
 
@@ -101,9 +129,8 @@ namespace Hangmo.Services
             return await _gameDAO.GetGameUserActive(id);
         }
 
-        public async Task<Game> EndGame()
+        public async Task<Game> EndGame(Game game)
         {
-            var game = new Game("1", 1);
             game.Status = GameStatus.Ended;
             await _gameDAO.UpdateAsync(game);
             return game;
