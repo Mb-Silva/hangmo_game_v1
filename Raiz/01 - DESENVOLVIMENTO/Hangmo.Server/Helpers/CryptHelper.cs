@@ -12,7 +12,7 @@ namespace Hangmo.Server.Helpers
 
         public static byte[] Crypt(string decryptValue)
         {
-            byte[] value = Encoding.ASCII.GetBytes(decryptValue);
+            byte[] value = Encoding.UTF8.GetBytes(decryptValue);
 
             ChaCha20 forEncrypting = new ChaCha20(key, iv, counter);
             byte[] encryptedContent = new byte[value.Length];
@@ -30,8 +30,7 @@ namespace Hangmo.Server.Helpers
             forDecrypting.DecryptBytes(decryptedContent, value);
 
             // Convertendo os bytes descriptografados para uma string
-            string decryptedString = Encoding.ASCII.GetString(decryptedContent);
-
+            string decryptedString = Encoding.UTF8.GetString(decryptedContent);
             return decryptedString;
         }
     }

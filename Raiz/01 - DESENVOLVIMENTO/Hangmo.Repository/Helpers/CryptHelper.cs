@@ -15,7 +15,7 @@ namespace Hangmo.Repository.Helpers
 
         public static byte[] Crypt(string decryptValue)
         {
-            byte[] value = Encoding.ASCII.GetBytes(decryptValue);
+            byte[] value = Encoding.UTF8.GetBytes(decryptValue);
 
             ChaCha20 forEncrypting = new ChaCha20(key, iv, counter);
             byte[] encryptedContent = new byte[value.Length];

@@ -23,9 +23,10 @@ namespace Hangmo.Repository.Data.DAO
             return result;
         }
 
-        public async Task<Game> GetGameByIdAsync(int id)
+        public async Task<Game?> GetGameByIdAsync(int id)
         {
-            return await _context.Games.Include(g => g.Word).FirstOrDefaultAsync(g => g.Id == id);
+            var result = await _context.Games.Include(g => g.Word).FirstOrDefaultAsync(g => g.Id == id);
+            return result;
         }
     }
 }

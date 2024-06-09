@@ -36,9 +36,17 @@ namespace Hangmo.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            MakeGuessResponse response = await _gameService.MakeGuess(request.GameId, request.Letter);            
+            try
+            {
+                MakeGuessResponse response = await _gameService.MakeGuess(request.GameId, request.Letter);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (KeyNotFoundException e) {
+
+                return NotFound(e);
+            }
+
         }
 
         [HttpGet("DailyWord", Name = "DailyWord")]
@@ -59,14 +67,14 @@ namespace Hangmo.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GetGameResponse>> GetGameById(int id)
         {
-            try
-            {
+            try{
+            
                 var response = await _gameService.GetGameById(id);
                 return Ok(response);
-            }
-            catch (KeyNotFoundException) {
 
-                return NotFound();
+            }catch (KeyNotFoundException e) {
+
+                return NotFound(e.Message);
 
             }
 
