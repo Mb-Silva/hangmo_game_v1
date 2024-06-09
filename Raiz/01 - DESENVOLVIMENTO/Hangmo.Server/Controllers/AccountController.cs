@@ -9,7 +9,7 @@ namespace Hangmo.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAppUserService _userService;
@@ -34,8 +34,24 @@ namespace Hangmo.Server.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
 
-            
+        [HttpPatch("UpdateUser", Name = "UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] AppUser userModel)
+        {
+            try
+            {
+                var user = await _userService.UpdateAppUser(userModel);
+
+                if (user == false)
+                    return NotFound();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

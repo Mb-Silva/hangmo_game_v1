@@ -69,7 +69,6 @@ builder.Services.AddScoped<GameDAO>();
 
 //builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
 
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -84,6 +83,7 @@ app.UseSwaggerUI();
 
 app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();
+
 // global cors policy
 app.UseCors(x => x
     .AllowAnyMethod()
