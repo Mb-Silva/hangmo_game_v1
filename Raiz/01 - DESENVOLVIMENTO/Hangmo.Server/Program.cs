@@ -96,8 +96,9 @@ app.MapPost("/logout", async (SignInManager<AppUser> signInManager) =>
     await signInManager.SignOutAsync().ConfigureAwait(false);
 }).RequireAuthorization(); // Para que apenas usuários autorizados possam usar este endpoint
 
-app.UseAuthorization();
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -38,20 +38,26 @@ namespace Hangmo.Services
 
             var word = CryptHelper.Decrypt(game.Word.SecretWord);
 
+            Console.WriteLine(word);
 
             var guessValidation = await FindLetter(word, letter);
 
-            if (!guessValidation.isPresent)
-            {
-                game.WrongGuessCount ++;
-            }
-            else
-            {
-                game.RevealedCharactersCount += guessValidation.positions.Count;
+            if (!game.GuessHistory.Contains(letter)){ 
+
+                if (guessValidation.isPresent)
+                {
+                    game.RevealedCharactersCount += guessValidation.positions.Count;
+
+                }
+                else
+                {
+                    game.WrongGuessCount++;
+                }
             }
 
             game = DetermineGameResult(game);
             game = DetermineGameStatus(game);
+            game.GuessHistory.Add(letter);
 
             await _gameDAO.UpdateAsync(game);
 
@@ -66,15 +72,15 @@ namespace Hangmo.Services
                 guessValidation.positions, 
                 letter
                 );
-
+            
             return response;
 
         }
-        public async Task<(Boolean isPresent, List<int> positions)> FindLetter (string palavra, char letra)
+        public async Task<(Boolean isPresent, List<(char, int)> positions)> FindLetter (string palavra, char letra)
         {           
             
             // Lista para armazenar as posições onde a letra foi encontrada, juntamente com o caractere encontrado
-            List<int> posicoes = new List<int>();
+            List<(char, int)> posicoes = new List<(char, int)>();
 
             // Converte a palavra e a letra para minúsculas para fazer a comparação sem diferenciar maiúsculas de minúsculas
             palavra = palavra.ToLower();
@@ -90,7 +96,8 @@ namespace Hangmo.Services
                 if (caractere == letra || CorrespondenteEspecial(caractere, letra))
                 {
                     // Se sim, adiciona a posição e o caractere à lista de posições
-                    posicoes.Add(i);
+                    posicoes.Add((caractere, i));
+                    
                 }
             }
 
@@ -129,6 +136,8 @@ namespace Hangmo.Services
 
             return false;
         }
+        
+        
         public async Task<GetGameResponse> GetGameById(int id)
         {
             var game =  await _gameDAO.GetGameByIdAsync(id);

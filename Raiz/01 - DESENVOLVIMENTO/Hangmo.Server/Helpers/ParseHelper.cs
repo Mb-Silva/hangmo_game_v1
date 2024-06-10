@@ -6,16 +6,7 @@ namespace Hangmo.Server.Helpers
     {
         public static List<string> Parse(string input)
         {
-            var result = new List<string>();
-
-            string[] secretWords = input.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string word in secretWords)
-            {
-                result.Add(word);
-            }
-            
-            return result;
+            return input.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         } 
 
         public static T GetRandomFromList<T>(List<T> list)

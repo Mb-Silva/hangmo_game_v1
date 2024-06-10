@@ -2,9 +2,14 @@
 
 namespace Hangmo.Server.ResponseModels
 {
+    public class LetterCoordinate
+    {
+        public char Character { get; set; }
+        public int Position { get; set; } 
+    }
     public class MakeGuessResponse
     {
-        public MakeGuessResponse(int gameId, GameStatus gameStatus, GameResult gameResult, int wrongGuessCount, int wordLength, bool isPresent, List<int>? positions, char letter)
+        public MakeGuessResponse(int gameId, GameStatus gameStatus, GameResult gameResult, int wrongGuessCount, int wordLength, bool isPresent, List<(char,int)> positions, char letter)
         {
             GameId = gameId;
             GameStatus = gameStatus;
@@ -12,7 +17,7 @@ namespace Hangmo.Server.ResponseModels
             WrongGuessCount = wrongGuessCount;
             WordLength = wordLength;
             IsPresent = isPresent;
-            Positions = positions;
+            Coordinates = positions.Select(t => new LetterCoordinate {Character = t.Item1, Position = t.Item2}).ToList();
             Letter = letter;
         }
 
@@ -28,7 +33,7 @@ namespace Hangmo.Server.ResponseModels
 
         public Boolean IsPresent { get; set; }
 
-        public List<int>? Positions { get; set; }
+        public List<LetterCoordinate>? Coordinates{ get; set; }
 
         public char Letter { get; set; }
 
