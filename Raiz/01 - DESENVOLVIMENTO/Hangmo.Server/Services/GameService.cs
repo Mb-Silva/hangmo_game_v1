@@ -42,7 +42,7 @@ namespace Hangmo.Services
 
             var guessValidation = await FindLetter(word, letter);
 
-            if (!game.GuessHistory.Contains(letter)){ 
+            if (!game.GuessHistory.Contains(letter)){
 
                 if (guessValidation.isPresent)
                 {

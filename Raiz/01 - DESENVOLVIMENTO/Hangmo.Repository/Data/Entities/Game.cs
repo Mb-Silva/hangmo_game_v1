@@ -44,7 +44,7 @@ namespace Hangmo.Repository.Data.Entities
 
         public int RevealedCharactersCount { get; set; } = 0;
 
-        public List<char> GuessHistory { get; set; }
+        public List<char> GuessHistory { get; set; } = new List<char>();
 
         public GameStatus Status { get; set; } 
 

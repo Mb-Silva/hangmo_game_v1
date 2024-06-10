@@ -42,9 +42,9 @@ namespace Hangmo.Server.Controllers
 
                 return Ok(response);
             }
-            catch (KeyNotFoundException e) {
+            catch (Exception ex) {
 
-                return NotFound(e);
+                return NotFound(ex.Message);
             }
 
         }
@@ -72,9 +72,9 @@ namespace Hangmo.Server.Controllers
                 var response = await _gameService.GetGameById(id);
                 return Ok(response);
 
-            }catch (KeyNotFoundException e) {
+            }catch (KeyNotFoundException ex) {
 
-                return NotFound(e.Message);
+                return NotFound(ex.Message);
 
             }
 
