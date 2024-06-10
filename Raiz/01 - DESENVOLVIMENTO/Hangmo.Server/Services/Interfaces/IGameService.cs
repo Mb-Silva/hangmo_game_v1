@@ -7,7 +7,7 @@ namespace Hangmo.Services.Interfaces
     public interface IGameService
     {
         Task<MakeGuessResponse> MakeGuess(int gameId, char letter);
-        Task<(Boolean isPresent, List<int> positions)> FindLetter(string palavra, char letra);
+        Task<(Boolean isPresent, List<(char, int)> positions)> FindLetter(string palavra, char letra);
 
         Task<GetGameResponse> GetGameById(int id);
         Task<GetGameResponse> AddGame(string userId, string theme);
