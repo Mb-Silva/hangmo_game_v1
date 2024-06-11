@@ -42,7 +42,7 @@ namespace Hangmo.Services
 
             var guessValidation = await FindLetter(word, letter);
 
-            if (!game.GuessHistory.Contains(letter)){
+            if (!game.GuessHistory.Contains(letter) && game.Status != GameStatus.Ended){
 
                 if (guessValidation.isPresent)
                 {
@@ -53,13 +53,16 @@ namespace Hangmo.Services
                 {
                     game.WrongGuessCount++;
                 }
+
+
+                game = DetermineGameResult(game);
+                game = DetermineGameStatus(game);
+                game.GuessHistory.Add(letter);
+
+                await _gameDAO.UpdateAsync(game);
+
             }
 
-            game = DetermineGameResult(game);
-            game = DetermineGameStatus(game);
-            game.GuessHistory.Add(letter);
-
-            await _gameDAO.UpdateAsync(game);
 
             MakeGuessResponse response =new MakeGuessResponse
                 (
@@ -195,7 +198,7 @@ namespace Hangmo.Services
 
         private Game DetermineGameResult(Game game)
         {
-            if (game.RevealedCharactersCount >= game.Word.SecretWord.Length)
+            if (game.RevealedCharactersCount >= CryptHelper.Decrypt(game.Word.SecretWord).Length)
             {
                 game.Result = GameResult.Win;
             
