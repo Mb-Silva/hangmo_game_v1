@@ -41,6 +41,7 @@ namespace Hangmo.Server.Controllers
         {
             try
             {
+                //Por segurança, deve ser adicionado uma validação se o usuário que está sendo atualizado, é o mesmo que está logado.
                 var user = await _userService.UpdateAppUser(userModel);
 
                 if (user == false)

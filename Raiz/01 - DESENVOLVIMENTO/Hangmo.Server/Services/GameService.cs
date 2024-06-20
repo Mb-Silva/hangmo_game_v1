@@ -128,6 +128,8 @@ namespace Hangmo.Services
                 {'ò', new char[] {'o'}},
                 {'é', new char[] {'e'}},
                 {'è', new char[] {'e'}},
+                {'â', new char[] {'a'}},
+                {'ê', new char[] {'e'}},
                 // Adicione mais correspondências especiais conforme necessário
             };
 
