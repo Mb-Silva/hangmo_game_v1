@@ -23,7 +23,7 @@ builder.Services.AddControllers()
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
-    
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -65,7 +65,28 @@ builder.Services.AddScoped<BaseService<Word>, WordService>();
 builder.Services.AddScoped<BaseService<AppUser>, AppUserService>();
 builder.Services.AddScoped<WordDAO>();
 builder.Services.AddScoped<AppUserDAO>();
-builder.Services.AddScoped<GameDAO>();  
+builder.Services.AddScoped<GameDAO>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Certifique-se de usar HTTPS
+    options.Cookie.SameSite = SameSiteMode.None; // Permitir cookies em requests CORS
+    options.Cookie.Name = "SSCK__";
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
+
 
 //builder.Services.AddHostedService<HostedWordGeneration>(); // Registra o HostedWordGeneration como um serviço hospedado
 
@@ -85,11 +106,7 @@ app.MapIdentityApi<AppUser>();
 app.UseHttpsRedirection();
 
 // global cors policy
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
-    .AllowCredentials()); // allow credentials
+app.UseCors("AllowSpecificOrigin");
 
 app.MapPost("/logout", async (SignInManager<AppUser> signInManager) =>
 {
