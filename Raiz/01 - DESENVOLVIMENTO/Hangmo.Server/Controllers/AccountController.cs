@@ -4,6 +4,7 @@ using Hangmo.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Hangmo.Server.Controllers
 {
@@ -19,11 +20,12 @@ namespace Hangmo.Server.Controllers
         }
 
         [HttpGet("GetUser", Name = "GetUser")]
-        public async Task<IActionResult> GetUser(string userId)
+        public async Task<IActionResult> GetUser()
         {
             try
             {
-                var user = await _userService.GetAppUser(userId);
+                var appUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _userService.GetAppUser(appUserId);
 
                 if (user == null)
                     return NotFound();
